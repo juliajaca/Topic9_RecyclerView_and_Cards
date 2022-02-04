@@ -1,6 +1,7 @@
 package com.example.topic9_recyclerview_and_cards;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,8 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
     // Member variables.
     private ArrayList<Sport> mSportsData;
     private Context mContext;
-
-
     /**
      * Constructor that passes in the sports data and the context.
-     *
      * @param sportsData ArrayList containing the sports data.
      * @param context Context of the application.
      */
@@ -30,11 +28,8 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
         this.mSportsData = sportsData;
         this.mContext = context;
     }
-
-
     /**
      * Required method for creating the viewholder objects.
-     *
      * @param parent The ViewGroup into which the new View will be added
      *               after it is bound to an adapter position.
      * @param viewType The view type of the new View.
@@ -54,11 +49,9 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
      * @param position The adapter position.
      */
     @Override
-    public void onBindViewHolder(SportsAdapter.ViewHolder holder,
-                                 int position) {
+    public void onBindViewHolder(SportsAdapter.ViewHolder holder, int position) {
         // Get current sport.
         Sport currentSport = mSportsData.get(position);
-
         // Populate the textviews with data.
         holder.bindTo(currentSport);
         //get the image resource from the Sport object and load it into the ImageView using Glide
@@ -66,25 +59,21 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
     }
     /**
      * Required method for determining the size of the data set.
-     *
      * @return Size of the data set.
      */
     @Override
     public int getItemCount() {
         return mSportsData.size();
     }
-
-
     /**
      * ViewHolder class that represents each row of data in the RecyclerView.
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // Member Variables for the TextViews
         private TextView mTitleText;
         private TextView mInfoText;
         private ImageView mSportsImage;
-
 
         /**
          * Constructor for the ViewHolder, used in onCreateViewHolder().
@@ -93,18 +82,26 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
          */
         ViewHolder(View itemView) {
             super(itemView);
-
             // Initialize the views.
             mTitleText = itemView.findViewById(R.id.title);
             mInfoText = itemView.findViewById(R.id.subTitle);
             mSportsImage = (ImageView) itemView.findViewById(R.id.sportsImage);
+            //Set the OnClickListener to the itemview in the constructor
+            itemView.setOnClickListener(this);
         }
-
         void bindTo(Sport currentSport){
             // Populate the textviews with data.
             mTitleText.setText(currentSport.getTitle());
             mInfoText.setText(currentSport.getInfo());
-
+        }
+        @Override
+        public void onClick(View view) {
+            //get the Sport object for the item that was clicked using getAdapterPosition():
+            Sport currentSport = mSportsData.get(getAdapterPosition());
+            Intent detailIntent = new Intent(mContext, DetailActivity.class);
+            detailIntent.putExtra("title", currentSport.getTitle());
+            detailIntent.putExtra("image_resource", currentSport.getImageResource());
+            mContext.startActivity(detailIntent);
         }
     }
 }
