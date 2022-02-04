@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 
 import java.util.ArrayList;
@@ -42,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initializeData() {
         // Get the resources from the XML file.
-        String[] sportsList = getResources()
-                .getStringArray(R.array.sports_titles);
-        String[] sportsInfo = getResources()
-                .getStringArray(R.array.sports_info);
+        String[] sportsList = getResources().getStringArray(R.array.sports_titles);
+        String[] sportsInfo = getResources().getStringArray(R.array.sports_info);
+        //Get the TypedArray of resource id's
+        TypedArray sportsImageResources =  getResources().obtainTypedArray(R.array.sports_images);
 
         // Clear the existing data (to avoid duplication).
         mSportsData.clear();
@@ -53,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
         // Create the ArrayList of Sports objects with titles and
         // information about each sport.
         for(int i=0;i<sportsList.length;i++){
-            mSportsData.add(new Sport(sportsList[i],sportsInfo[i]));
+            mSportsData.add(new Sport(sportsList[i],sportsInfo[i], sportsImageResources.getResourceId(i,0)));
         }
+        sportsImageResources.recycle();
 
         // Notify the adapter of the change.
         mAdapter.notifyDataSetChanged();

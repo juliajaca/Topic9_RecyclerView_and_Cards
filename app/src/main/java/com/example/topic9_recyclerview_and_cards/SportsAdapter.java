@@ -1,10 +1,14 @@
 package com.example.topic9_recyclerview_and_cards;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -14,6 +18,7 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
     // Member variables.
     private ArrayList<Sport> mSportsData;
     private Context mContext;
+
 
     /**
      * Constructor that passes in the sports data and the context.
@@ -56,8 +61,9 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
 
         // Populate the textviews with data.
         holder.bindTo(currentSport);
+        //get the image resource from the Sport object and load it into the ImageView using Glide
+        Glide.with(mContext).load(currentSport.getImageResource()).into(holder.mSportsImage);
     }
-
     /**
      * Required method for determining the size of the data set.
      *
@@ -77,6 +83,8 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
         // Member Variables for the TextViews
         private TextView mTitleText;
         private TextView mInfoText;
+        private ImageView mSportsImage;
+
 
         /**
          * Constructor for the ViewHolder, used in onCreateViewHolder().
@@ -89,6 +97,7 @@ public class SportsAdapter extends RecyclerView.Adapter<SportsAdapter.ViewHolder
             // Initialize the views.
             mTitleText = itemView.findViewById(R.id.title);
             mInfoText = itemView.findViewById(R.id.subTitle);
+            mSportsImage = (ImageView) itemView.findViewById(R.id.sportsImage);
         }
 
         void bindTo(Sport currentSport){
