@@ -2,6 +2,7 @@ package com.example.topic9_recyclerview_and_cards;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
 
         // Set the Layout Manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize the ArrayList that will contain the data.
         mSportsData = new ArrayList<>();
@@ -41,11 +42,22 @@ public class MainActivity extends AppCompatActivity {
         // Get the data.
         initializeData();
 
+        //Parte dos de la tarea
+        int gridColumnCount = getResources().getInteger(R.integer.grid_column_count);
+        //Change the LinearLayoutManager to a GridLayoutManager, passing in the context and the newly created integer:
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridColumnCount));
+        //disable the swipe action when there is more than one column:
+        int swipeDirs;
+        if(gridColumnCount > 1){
+            swipeDirs = 0;
+        } else {
+            swipeDirs = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        }
 
         //implementar swipe --> creo el itemTouchHelper
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper
                 .SimpleCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT |
-                ItemTouchHelper.DOWN | ItemTouchHelper.UP, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.DOWN | ItemTouchHelper.UP, swipeDirs) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
@@ -64,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         });
         // add it to your RecyclerView
         helper.attachToRecyclerView(mRecyclerView);
+
+
+
     }
 
     /**
